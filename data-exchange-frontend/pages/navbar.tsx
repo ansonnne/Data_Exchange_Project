@@ -5,14 +5,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from '@mui/material';
 import { NextResponse, NextRequest } from 'next/server';
-import cookie from "js-cookie";
+//import cookie from "js-cookie";
 
 export default function NavBar(req: NextRequest, res: NextResponse) {
-  const [address, setAddress] = useState();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [address, setAddress] = useState<string>();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -21,6 +20,21 @@ export default function NavBar(req: NextRequest, res: NextResponse) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    const address = sessionStorage.getItem("wallet");
+    if (address) {
+      setAddress(address);
+    }
+  }, []);
+
+  const isLoggedIn = useMemo(()=>{
+    if (address) {
+      return true;
+    }
+    return false;
+  }, [address])
+
 
   const connectToTheMetaMask = useCallback(async () => {
     // check if the browser has MetaMask installed
@@ -33,13 +47,14 @@ export default function NavBar(req: NextRequest, res: NextResponse) {
       method: "eth_requestAccounts",
     });
     setAddress(accounts[0]);
-    setIsLoggedIn(true);
-    cookie.set("UserAddress",accounts[0], {expires: 1/24})
+    //cookie.set("UserAddress",accounts[0], {expires: 1/24})
+    sessionStorage.setItem("wallet", accounts[0])
   }, []);
 
   const logOut = () => {
-    cookie.remove('UserAddress');
-    setIsLoggedIn(false);
+    //cookie.remove('UserAddress');
+    sessionStorage.removeItem("wallet");
+    setAddress("");
   };
 
   return (
@@ -51,7 +66,7 @@ export default function NavBar(req: NextRequest, res: NextResponse) {
         <a href="activate"><MenuItem sx={{ borderRadius: 2 }}>Activate</MenuItem></a>
         <a href="purchase_raw_data"><MenuItem sx={{ borderRadius: 2 }}>Purchase Data</MenuItem></a>
         <a href="purchase_ml_data"><MenuItem sx={{ borderRadius: 2 }}>Purchase ML Data</MenuItem></a>
-        <Tooltip title="Account">
+        <Tooltip title="Account" className="Avatar">
           <IconButton
             onClick={handleClick}
             size="small"
@@ -59,6 +74,7 @@ export default function NavBar(req: NextRequest, res: NextResponse) {
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
+            className="Avatar"
           >
             <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
           </IconButton>
@@ -111,8 +127,4 @@ export default function NavBar(req: NextRequest, res: NextResponse) {
       </Menu>
     </React.Fragment>
   );
-}
-
-export function parseCookies({req, res}) {
-  return {props: {UserAddress: req.cookies.token || "" }}
 }

@@ -1,14 +1,21 @@
 import NavBar from './navbar'
 import abi from "../src/data_transaction.json"
 import { contractAddress } from "../src/address"
-import { useCallback, useMemo, useState } from "react";
 import { ethers } from "ethers";
-import { getCookie } from 'cookies-next';
+//import { getCookie } from 'cookies-next';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-export default function Index({UserAddress}) {
-  const [address, setAddress] = useState();
+export default function Index() {
+  const [address, setAddress] = useState<string>();
   const [id_list, setID] = useState();
-  const userAddress = getCookie('UserAddress')
+  //const userAddress = getCookie('UserAddress')
+
+  useEffect(() => {
+    const address = sessionStorage.getItem("wallet");
+    if (address) {
+      setAddress(address);
+    }
+  }, []);
 
   const getBalance = async () => {
     if (provider === null) return;
@@ -54,6 +61,7 @@ export default function Index({UserAddress}) {
     <>
       <NavBar />
       <h1>Data Exchange Platform</h1>
+      <p>Address: {address}</p>
       <p>Data Exchange is a decentralized ...</p>
       <h3>To start with, please click the "LOGIN" button inside the user icon at the top of the navigation bar.</h3>
       

@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import abi from "../src/data_transaction.json";
 import { contractAddress } from "../src/address";
 import { ethers } from "ethers";
-import { Button } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, TextField } from '@mui/material';
 
 
 export default function Upload() {
@@ -75,6 +75,7 @@ export default function Upload() {
           <OutlinedInput
             id="priceInput"
             label="Price (in wei)"
+            type="number"
           />
         </FormControl>
 
@@ -101,8 +102,16 @@ export default function Upload() {
             multiline
             rows={4}
           />
+        
+
+        <FormControl>
+          <FormControlLabel control={<Checkbox />} label="Purchase ML Service" />
+        </FormControl>
+        
           <Button type="submit">Upload Data</Button>
         </FormControl>
+        
+        
         
     </Box>
     
