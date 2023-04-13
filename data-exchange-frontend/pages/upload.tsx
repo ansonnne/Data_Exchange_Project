@@ -8,9 +8,18 @@ import abi from "../src/data_transaction.json";
 import { contractAddress } from "../src/address";
 import { ethers } from "ethers";
 import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 
 export default function Upload() {
+  const [address, setAddress] = useState<string>();
+
+  useEffect(() => {
+    const address = sessionStorage.getItem("wallet");
+    if (address) {
+      setAddress(address);
+    }
+  }, []);
 
   const categories = [
     {
