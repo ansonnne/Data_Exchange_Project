@@ -1,13 +1,22 @@
 body {
   background-color: #FDF8F0;
+  color: #2F1C6A;
+  opacity: 0.9;
+}
+
+Box {
+  background-color: #F5F5F5;
+  color: #2F1C6A;
   opacity: 0.9;
 }
 
 a {
-  color: black;
+  color: #2F1C6A;
   text-decoration: none;
 }
-
+img {
+  width: '100%'
+}
 .Avatar {
   position: absolute;
   right: 30px;

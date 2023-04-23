@@ -2,13 +2,77 @@ import NavBar from './navbar'
 import abi from "../src/data_transaction.json"
 import { contractAddress } from "../src/address"
 import { ethers } from "ethers";
-//import { getCookie } from 'cookies-next';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {createTheme, ThemeProvider,Typography,} from "@mui/material";
+import { Box, Stack } from "@mui/system";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import * as React from 'react';
+
+//Central styling session
+const theme = createTheme({
+  components: {
+    MuiTypography: {
+      variants: [
+        {
+          props: {
+            variant: "body1",
+          },
+          style: {
+            fontSize: 14,
+          },
+        },
+        {
+          props: {
+            variant: "body1",
+          },
+          style: {
+            fontSize: 9,
+          },
+        },
+      ],
+    },
+  },
+});
+
+
+//Prerequisites for the Item List under 'About the Company'
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 export default function Index() {
   const [address, setAddress] = useState<string>();
   const [id_list, setID] = useState();
-  //const userAddress = getCookie('UserAddress')
 
   useEffect(() => {
     const address = sessionStorage.getItem("wallet");
@@ -55,16 +119,121 @@ export default function Index() {
     setAddress(accounts[0]);
   }, []);
 
+  //Prerequisite for Item list under 'About the Company'
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  const [value1, setValue1] = React.useState(1);
+
+  const handleChange1 = (event: React.SyntheticEvent, newValue1: number) => {
+    setValue1(newValue1);
+  };
 
 
   return (
     <>
       <NavBar />
-      <h1>Data Exchange Platform</h1>
-      <p>Address: {address}</p>
-      <p>Data Exchange is a decentralized ...</p>
-      <h3>To start with, please click the "LOGIN" button inside the user icon at the top of the navigation bar.</h3>
-      
+
+      <Box sx={{width: '100%', boxshadow: 2}}>
+        <img src="Purple_4.png" alt="Image Not Found" width="100%"/>
+      </Box>
+      <Box sx={{boxshadow: 2, display: 'block', p: 1, m: 5}}>
+        <ThemeProvider theme={theme}>
+          <Stack spacing={2}>
+            <Box>
+              <Typography variant="h4" color="#2F1C6A">
+                About Our Project
+              </Typography>
+            </Box>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tab label="Project Intro" {...a11yProps(0)} />
+                <Tab label="Implementation Ideas" {...a11yProps(1)} />
+                <Tab label="Teammates" {...a11yProps(2)} />
+              </Tabs>
+            </Box>
+            <TabPanel value={value} index={0}>
+              <Typography variant='subtitle1' color="#251654">
+                This is a decentralized data transaction platform providing medium for the exchange of two types of products, raw data and API key for machine learning model. 
+                Dataset sellers can upload their data stored in IPFS to our platform and claim the selling price through our smart contract. There is an option for them to purchase machine learning service provided by our team. 
+                
+                We hope to leverage our expertise to generate valuable insights based on sellers’ data. The machine learning models that we create will co-exist with the raw data provided by data sellers. 
+                It depends on buyers’ needs to choose either product that suits them more while sellers can also benefit from multiple product lines to generate increased sales amount. 
+
+                Our platform is powered by the usage of IPFS and smart contract which speeds up the transaction process and eliminates the need for us to maintain database. 
+                To promote the best data transaction environment, we will dedicate our efforts towards regulation. 
+                
+              </Typography>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Typography variant='subtitle1'  color="#251654">
+                We have a two-stage development plan for the regulation, with due diligence validation in IPFS at first, followed by automatic data validation powered by in-house machine learning model. 
+                The aim of our platform is to maximize the utilization of data across the globe which eventually facilitates the research and development process of new innovation. 
+                By resource reallocation, data sellers are able to generate revenue and data buyers are able to create innovation for the benefits of the society. 
+              </Typography>
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Typography variant='subtitle1'   color="#251654">
+                <ul>
+                  <li>Anson</li>
+                  <li>Hania</li>
+                  <li>Jackson</li>
+                  <li>Kelvin</li>
+                  <li>Kenny</li>
+                  <li>Yanni</li>
+                </ul>
+              </Typography>
+            </TabPanel>
+          </Stack>
+        </ThemeProvider>
+      </Box>
+    
+    <Box sx={{boxshadow: 2, display: 'block', p: 1, m: 5}}>
+      <ThemeProvider theme={theme}>
+        <Stack spacing={2}>
+          <Typography variant="h4"   color="#251654">
+            Product Introduction
+          </Typography>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value1} onChange={handleChange1} aria-label="basic tabs example 1">
+              <Tab label="Raw data" {...a11yProps(0)} />
+              <Tab label="Machine learning package" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <TabPanel value={value1} index={0}>
+            <Typography variant='subtitle1'  color="#251654">
+              Raw data Purchase guide
+            </Typography>
+          </TabPanel>
+          <TabPanel value={value1} index={1}>
+            <Typography variant='subtitle1'  color="#251654">
+              ML package purchase guide
+            </Typography>
+          </TabPanel>
+        </Stack>
+      </ThemeProvider>
+    </Box>
+
+    <Box sx={{boxshadow: 2, display: 'block', p: 1, m: 5}}>
+      <ThemeProvider theme={theme}>
+        <Stack spacing={2}>
+          <Box>
+            <Typography variant="h4" color="#251654">
+                User Guide
+            </Typography>
+          </Box>
+          <Box sx={{boxshadow: 2, display: 'block', p: 1, m: 5}}>
+            <Typography variant="subtitle1" color="#251654">
+                Please click the M button on top of the webpage to login with your wallet address!
+            </Typography>
+          </Box>
+        </Stack>
+      </ThemeProvider>
+    </Box>
+
     </>
   );
 }
