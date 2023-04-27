@@ -1,45 +1,142 @@
 import NavBar from './navbar';
-import React, { useState } from 'react';
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-} from '@mui/material';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material';
+import { ethers } from 'ethers';
+import { contractAddress } from '@/src/address';
+import abi from "../src/data_transaction.json";
+import { Constants } from "../Constants";
+declare const window: any;
 
-const data = [
-  { name: 'Data 1', price: 10, category: 'A' },
-  { name: 'Data 2', price: 20, category: 'B' },
-  { name: 'Data 3', price: 30, category: 'C' },
-  { name: 'Data 4', price: 40, category: 'D' },
-  { name: 'Data 5', price: 80, category: 'C' },
-];
+// const data = [
+//   { name: 'Data 1', price: 10, category: 'A', description: 'abc' },
+//   { name: 'Data 2', price: 20, category: 'B', description: 'def' },
+//   { name: 'Data 3', price: 30, category: 'C', description: 'ddfds' },
+//   { name: 'Data 4', price: 40, category: 'D', description: '1dsd' },
+//   { name: 'Data 5', price: 80, category: 'C', description: 'Pokemon testing' },
+// ];
+
+interface data {
+  name: string;
+  price: number;
+  description: string;
+}
 
 export default function Purchase_Raw_Data() {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All categories');
   const [priceFilter, setPriceFilter] = useState('All prices');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [dataList, setData] = useState<data[]>([]);
 
   // Filter table data based on search query, category filter, and price filter
-  const filteredData = data.filter((row) => {
-    const name = row.name.toLowerCase();
-    const query = searchQuery.toLowerCase();
-    const category = row.category.toLowerCase();
+  // const filteredData = data.filter((row) => {
+  //   // const name = row.name.toLowerCase();
+  //    const query = searchQuery.toLowerCase();
+  //   //const category = row.category.toLowerCase();
 
-    // Check if the row matches the search query, category filter, and price filter
-    return (
-      (name.includes(query) || category.includes(query)) &&
-      (categoryFilter === 'All categories' || category === categoryFilter.toLowerCase()) &&
-      (priceFilter === 'All prices' || (priceFilter === 'Under $50' && row.price < 50) || (priceFilter === 'Between $50 and $100' && row.price >= 50 && row.price <= 100) || (priceFilter === 'Over $100' && row.price > 100))
-    );
-  });
+  //   // Check if the row matches the search query, category filter, and price filter
+  //   // return (
+  //   //   (name.includes(query) || category.includes(query)) &&
+  //   //   (categoryFilter === 'All categories' || category === categoryFilter.toLowerCase()) &&
+  //   //   (priceFilter === 'All prices' || (priceFilter === 'Under $50' && row.price < 50) || 
+  //   //   (priceFilter === 'Between $50 and $100' && row.price >= 50 && row.price <= 100) || 
+  //   //   (priceFilter === 'Over $100' && row.price > 100))
+  //   // );
+  //   return (
+  //     (name.includes(query)) &&
+  //     (categoryFilter === 'All categories') &&
+  //     (priceFilter === 'All prices' || (priceFilter === 'Under $50' && row.price < 50) || 
+  //     (priceFilter === 'Between $50 and $100' && row.price >= 50 && row.price <= 100) || 
+  //     (priceFilter === 'Over $100' && row.price > 100))
+  //   );
+  // });
+
+
+  //load the table data
+  useEffect(() => {
+      (async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+
+        const dataExchange = new ethers.Contract(
+          contractAddress,
+          abi.abi,
+          signer
+        );
+        console.log(dataExchange)
+        setIsProcessing(true);
+        
+        const transaction = await dataExchange.view_raw_data_id_list()
+        console.log("Transaction length",transaction.length)
+        const a_list = []
+        for (let i = 0; i < transaction.length; i++){
+          const result = await dataExchange.retrieve_raw_data_info([i])
+          a_list.push(result)
+        }
+        
+        const b_list = a_list.reduce((acc, curr) => {
+          curr.forEach((el, i) => {
+            if (acc[i] === undefined) {
+              acc[i] = [el];
+            } else {
+              if (curr[i] === undefined) {
+                acc[i].push(undefined);
+              } else {
+                acc[i].push(el);
+              }
+            }
+          });
+          return acc;
+        }, []);
+
+        console.log("b_list",b_list)
+
+        const c_list: data[] = b_list[0].map((_, i: number) => ({
+          name: b_list[0][i].toString(),
+          price: b_list[1][i].toString(),
+          description: b_list[2][i].toString(),
+        }));
+        
+        setData(c_list)
+        console.log("DataList", dataList)
+
+        setIsProcessing(false);
+        return Constants.MESSAGE_TRASACTION_UPLOAD_SUCCESSFULLY
+      })();
+  },[]);
+
+  const purchase = useCallback(
+    async (index: number) => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+
+        const dataExchange = new ethers.Contract(
+          contractAddress,
+          abi.abi,
+          signer
+        );
+        console.log(dataExchange)
+        setIsProcessing(true);
+        try {
+          console.log("Index",index)
+          const tx = await dataExchange.purchaseData(index)
+          console.log(tx)
+          
+          await tx.wait()
+          setIsProcessing(false);
+
+        } 
+        catch(e) {
+          console.error(e,index)
+          window.alert(`${e}`)
+        }
+    },
+    []
+  )
+  
+
 
   return (
     <>
@@ -99,18 +196,22 @@ export default function Purchase_Raw_Data() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
+            <TableCell>Data Name</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Category</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredData.length > 0 ? (
-            filteredData.map((row, index) => (
+          {dataList.length > 0 ? (
+            dataList.map((data, index) => (
               <TableRow key={index}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.price}</TableCell>
-                <TableCell>{row.category}</TableCell>
+                <TableCell>{data.name}</TableCell>
+                <TableCell>{data.price}</TableCell>
+                <TableCell>Category</TableCell>
+                <TableCell>{data.description}</TableCell>
+                <TableCell><Button onClick={() => purchase(index)}>Purchase Now</Button></TableCell>
               </TableRow>
             ))
           ) : (
