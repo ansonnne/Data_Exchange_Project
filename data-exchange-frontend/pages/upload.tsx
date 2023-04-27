@@ -85,7 +85,7 @@ export default function Upload() {
     return fromAddress
   }
 
-  const uploadData = async (data_name: String, data_hash: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
+  const uploadData = async (data_hash: String, data_name: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = await provider.getSigner();
@@ -106,16 +106,11 @@ export default function Upload() {
       console.log("data_hash, dataName,price, purchaseMl,dataDesc,", data_hash, data_name, price, purchase_Ml, data_desc);
 
       const transaction = await dataExchange.uploadData(data_hash, data_name, price, purchase_Ml, data_desc)
-        /*.send({
-          from: address,
-          value: purchase_Ml ? 1 : 0
-        })
-        .then((res: any) => {
-          console.log("uploadResult", res)
-        });*/
       console.log(transaction)
+
       const result = await transaction.wait()
       console.log(result)
+
       setIsProcessing(false);
       return Constants.MESSAGE_TRASACTION_UPLOAD_SUCCESSFULLY
     }
@@ -125,32 +120,6 @@ export default function Upload() {
       return Constants.MESSAGE_TRASACTION_GENERAL_ERROR
     }
   }
-
-  /*const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsProcessing(true);
-    setMessage('');
-
-  const uploadData = async (data_hash: String, dataName:String,price: Number, purchaseMl: boolean, dataDesc:String,inputAddress?: String) => {
-
-      try {
-        const result = await DataExchange.contractService.uploadData(dataHash, dataName, price, purchaseMl, dataDesc);
-        setMessage(result);
-      } catch (error) {
-        console.log(error);
-        setMessage('There was an error uploading the data.');
-      }
-  
-      setIsProcessing(false);
-    };
-  
-    const handleReset = () => {
-      setDataHash('');
-      setDataName('');
-      setPrice(0);
-      setPurchaseMl(false);
-      setDataDesc('');
-    };*/
 
   const [dataHash, setDataHash] = useState('');
   const [dataName, setDataName] = useState('');
