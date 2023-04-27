@@ -107,9 +107,11 @@ export default function Upload() {
 
       const transaction = await dataExchange.uploadData(data_hash, data_name, price, purchase_Ml, data_desc)
       console.log(transaction)
+      alert("Please wait until a pop up dialog indicate data is uploaded")
 
       const result = await transaction.wait()
       console.log(result)
+      alert("Data uploaded sucessfully")
 
       setIsProcessing(false);
       return Constants.MESSAGE_TRASACTION_UPLOAD_SUCCESSFULLY
