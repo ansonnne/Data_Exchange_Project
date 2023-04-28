@@ -19,6 +19,7 @@ declare const window: any;
 interface data {
   name: string;
   price: number;
+  category: string;
   description: string;
 }
 
@@ -46,23 +47,23 @@ export default function Purchase_Raw_Data() {
   const filteredData = dataList.filter((row) => {
      const name = row.name.toLowerCase();
      const query = searchQuery.toLowerCase();
-    //const category = row.category.toLowerCase();
+    const category = row.category.toLowerCase();
 
   //   // Check if the row matches the search query, category filter, and price filter
-    // return (
-    //   (name.includes(query) || category.includes(query)) &&
-    //   (categoryFilter === 'All categories' || category === categoryFilter.toLowerCase()) &&
-    //   (priceFilter === 'All prices' || (priceFilter === 'Under $50' && row.price < 50) || 
-    //   (priceFilter === 'Between $50 and $100' && row.price >= 50 && row.price <= 100) || 
-    //   (priceFilter === 'Over $100' && row.price > 100))
-    // );
     return (
-      (name.includes(query)) &&
-      (categoryFilter === 'All categories') &&
+      (name.includes(query) || category.includes(query)) &&
+      (categoryFilter === 'All categories' || category === categoryFilter.toLowerCase()) &&
       (priceFilter === 'All prices' || (priceFilter === 'Under $50' && row.price < 50) || 
       (priceFilter === 'Between $50 and $100' && row.price >= 50 && row.price <= 100) || 
       (priceFilter === 'Over $100' && row.price > 100))
     );
+    // return (
+    //   (name.includes(query)) &&
+    //   (categoryFilter === 'All categories') &&
+    //   (priceFilter === 'All prices' || (priceFilter === 'Under $50' && row.price < 50) || 
+    //   (priceFilter === 'Between $50 and $100' && row.price >= 50 && row.price <= 100) || 
+    //   (priceFilter === 'Over $100' && row.price > 100))
+    // );
   });
 
 
@@ -110,7 +111,8 @@ export default function Purchase_Raw_Data() {
         const c_list: data[] = b_list[0].map((_, i: number) => ({
           name: b_list[0][i].toString(),
           price: b_list[1][i].toString(),
-          description: b_list[2][i].toString(),
+          category: b_list[2][i].toString(),
+          description: b_list[3][i].toString(),
         }));
         
         setData(c_list)
@@ -191,10 +193,15 @@ export default function Purchase_Raw_Data() {
             onChange={(e) => setCategoryFilter(e.target.value)}
           >
             <MenuItem value="All categories">All categories</MenuItem>
-            <MenuItem value="A">A</MenuItem>
-            <MenuItem value="B">B</MenuItem>
-            <MenuItem value="C">C</MenuItem>
-            <MenuItem value="D">D</MenuItem>
+            <MenuItem value="Consumer">Consumer</MenuItem>
+            <MenuItem value="Big Data">Big Data</MenuItem>
+            <MenuItem value="Technology">Technology</MenuItem>
+            <MenuItem value="Business Analytics">Business Analytics</MenuItem>
+            <MenuItem value="Human Resource">Human Resource</MenuItem>
+            <MenuItem value="Marketing">Marketing</MenuItem>
+            <MenuItem value="Sales">Sales</MenuItem>
+            <MenuItem value="Supply Chain">Supply Chain</MenuItem>
+            <MenuItem value="Others">Others</MenuItem>
           </Select>
         </FormControl>
 
@@ -231,7 +238,7 @@ export default function Purchase_Raw_Data() {
               <TableRow key={index}>
                 <TableCell>{data.name}</TableCell>
                 <TableCell>{data.price}</TableCell>
-                <TableCell>Category</TableCell>
+                <TableCell>{data.category}</TableCell>
                 <TableCell>{data.description}</TableCell>
                 <TableCell><Button onClick={() => purchase(index)}>Purchase Now</Button></TableCell>
               </TableRow>

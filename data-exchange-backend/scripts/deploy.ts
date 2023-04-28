@@ -6,7 +6,8 @@ async function main() {
   const contract = await Contract.deploy();
 
   await contract.deployed();
-  //Address: 0x7CC67D0264896eBE0f896c251ca5A1B1Fb5D3eEd
+  //Origin Address: 0x7CC67D0264896eBE0f896c251ca5A1B1Fb5D3eEd
+  //First Update Address: 0x297B8FC0FB776FAABcaabD3db60999bED31FbF7c
   console.log("Contract deployed to:", contract.address);
 }
 

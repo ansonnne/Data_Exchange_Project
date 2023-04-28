@@ -66,7 +66,7 @@ export default function Upload() {
 
   
 
-  const uploadData = async (data_hash: String, data_name: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
+  const uploadData = async (data_hash: String, data_name: String, data_category: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = await provider.getSigner();
@@ -84,9 +84,9 @@ export default function Upload() {
 
     try {
       //let fromAddress = await validateInputAddress(inputAddress);
-      console.log("data_hash, dataName,price, purchaseMl,dataDesc,", data_hash, data_name, price, purchase_Ml, data_desc);
+      console.log("data_hash, dataName,price, purchaseMl,dataDesc,", data_hash, data_name, data_category,price, purchase_Ml, data_desc);
 
-      const transaction = await dataExchange.uploadData(data_hash, data_name, price, purchase_Ml, data_desc)
+      const transaction = await dataExchange.uploadData(data_hash, data_name, data_category, price, purchase_Ml, data_desc)
       console.log(transaction)
       alert("Please wait until a pop up dialog indicate data is uploaded")
 
@@ -132,7 +132,7 @@ export default function Upload() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsProcessing(true);
-    uploadData(dataHash, dataName, dataPrice, dataPurchaseMl, dataDesc);
+    uploadData(dataHash, dataName, dataCategory, dataPrice, dataPurchaseMl, dataDesc);
     //setDataHash('');
   };
   return (

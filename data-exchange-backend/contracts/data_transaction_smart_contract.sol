@@ -4,6 +4,7 @@ contract data_transaction {
     struct data {
         string dataHash;
         string dataset_name;
+        string data_category;
         address seller;
         uint price;
         string description;
@@ -46,8 +47,8 @@ contract data_transaction {
     receive () external payable {}
     event excess_eth_returned(address, uint);  //exchange excess eth sent to sender
 
-    function uploadData(string memory data_hash, string memory dataset_name, uint price, bool purchase_ML, string memory data_description) public payable {
-        data_map[raw_data_id] = data(data_hash, dataset_name, msg.sender, price, data_description, new address[](0));
+    function uploadData(string memory data_hash, string memory dataset_name, string memory data_category,uint price, bool purchase_ML, string memory data_description) public payable {
+        data_map[raw_data_id] = data(data_hash, dataset_name, data_category, msg.sender, price, data_description, new address[](0));
 
         if (purchase_ML == true) {
             require(msg.value >= ml_purchase_fee, "Inadequate ETH sent");
@@ -139,16 +140,18 @@ contract data_transaction {
     }
 
     //For front-end retrieval
-    function retrieve_raw_data_info(uint[] memory data_id_list) public view returns (string[] memory, uint[] memory, string[] memory){
+    function retrieve_raw_data_info(uint[] memory data_id_list) public view returns (string[] memory, uint[] memory, string[] memory,string[] memory){
         string[] memory dataset_name_list = new string[](data_id_list.length);
         uint[] memory data_price_list = new uint[](data_id_list.length);
+        string[] memory data_category_list = new string[](data_id_list.length);
         string[] memory data_description_list = new string[](data_id_list.length);
         for (uint i=0; i<data_id_list.length; i++){
              dataset_name_list[i] = data_map[data_id_list[i]].dataset_name;
              data_price_list[i] = data_map[data_id_list[i]].price;
+             data_category_list[i] = data_map[data_id_list[i]].data_category;
              data_description_list[i] = data_map[data_id_list[i]].description;
         }
-        return (dataset_name_list, data_price_list, data_description_list);
+        return (dataset_name_list, data_price_list, data_category_list, data_description_list);
     }
 
     //For front-end retrieval
