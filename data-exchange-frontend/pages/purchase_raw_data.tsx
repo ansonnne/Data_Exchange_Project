@@ -123,7 +123,11 @@ export default function Purchase_Raw_Data() {
       console.log(dataExchange)
       setIsProcessing(true);
       try {
-        const tx = await dataExchange.purchaseData(index)
+        const price = filteredData[index].price
+        console.log("price is ", price)
+        const tx = await dataExchange.purchaseData(index, {
+          value: price,
+        })
         console.log(tx)
         alert("Please wait until a pop up dialog indicate purchase is successful.")
 
