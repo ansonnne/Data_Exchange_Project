@@ -29,6 +29,18 @@ export default function Purchase_Raw_Data() {
   const [priceFilter, setPriceFilter] = useState('All prices');
   const [isProcessing, setIsProcessing] = useState(false);
   const [dataList, setData] = useState<data[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  //loading when webpage is loaded for first 5 seconds
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000); // 5000 = 5 seconds
+
+    return () => {
+      clearTimeout(timeout); // clear the timeout on unmount
+    };
+  }, []); // run the effect only once on mount
 
   // Filter table data based on search query, category filter, and price filter
   const filteredData = dataList.filter((row) => {
@@ -68,7 +80,7 @@ export default function Purchase_Raw_Data() {
         );
         console.log(dataExchange)
         setIsProcessing(true);
-        
+
         const transaction = await dataExchange.view_raw_data_id_list()
         console.log("Transaction length",transaction.length)
         const a_list = []
@@ -109,6 +121,7 @@ export default function Purchase_Raw_Data() {
       })();
   },[]);
 
+  //purchase data
   const purchase = useCallback(async (index: number) => {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -123,7 +136,7 @@ export default function Purchase_Raw_Data() {
       console.log(dataExchange)
       setIsProcessing(true);
       try {
-        const price = filteredData[index].price
+        const price = filteredData[index]?.price
         console.log("price is ", price)
         const tx = await dataExchange.purchaseData(index, {
           value: price,
@@ -142,7 +155,7 @@ export default function Purchase_Raw_Data() {
         window.alert(`${e}`)
       }
     },
-    []
+    [filteredData]
   )
   
 
@@ -224,11 +237,19 @@ export default function Purchase_Raw_Data() {
               </TableRow>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={3} align="center">
-                Loading data...
-              </TableCell>
-            </TableRow>
+                isProcessing === true || isLoading === true ? (
+                  <TableRow>
+                  <TableCell colSpan={3} align="center">
+                    Loading Data...
+                  </TableCell>
+                </TableRow>
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3} align="center">
+                      No data found
+                    </TableCell>
+                  </TableRow>
+                )
           )}
         </TableBody>
       </Table>

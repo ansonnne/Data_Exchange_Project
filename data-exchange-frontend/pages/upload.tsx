@@ -25,65 +25,46 @@ export default function Upload() {
     }
   }, [])
 
-  /*const categories = [
+  const categories = [
     {
-      value: 'A',
-      label: 'A',
+      value: 'Consumer',
+      label: 'Consumer',
     },
     {
-      value: 'B',
-      label: 'B',
+      value: 'Big Data',
+      label: 'Big Data',
     },
     {
-      value: 'C',
-      label: 'C',
+      value: 'Technology',
+      label: 'Technology',
     },
     {
-      value: 'D',
-      label: 'D',
+      value: 'Business Analytics',
+      label: 'Business Analytics',
     },
-  ];*/
+    {
+      value: 'Human Resource',
+      label: 'Human Resource',
+    },
+    {
+      value: 'Marketing',
+      label: 'Marketing',
+    },
+    {
+      value: 'Sales',
+      label: 'Sales',
+    },
+    {
+      value: 'Supply Chain',
+      label: 'Supply Chain',
+    },
+    {
+      value: 'Others',
+      label: 'Others',
+    }
+  ];
 
-  // const isAddressBlank = (address?: String): boolean => {
-  //   return (address == null || address === "");
-  // }
-
-  // const getAccounts = async () => {
-  //   try {
-  //     return await window.ethereum.request({ method: 'eth_accounts' });
-  //   } catch (e) {
-  //     return [];
-  //   }
-  // }
-
-  // const openMetamask = async () => {
-  //   window.web3 = new Web3(window.ethereum);
-  //   let userAddresses = await getAccounts();
-  //   console.log("userAddress:", userAddresses)
-  //   if (!userAddresses.length) {
-  //     try {
-  //       userAddresses = await window.ethereum.enable();
-  //     } catch (e) {
-  //       return false;
-  //     }
-  //   }
-  //   return userAddresses.length ? userAddresses[0] : null;
-  // };
-
-  // const validateInputAddress = async (inputAddress?: String) => {
-  //   let fromAddress;
-  //   if (isAddressBlank(inputAddress)) {
-  //     console.log("Calling openmMetamask to get user address");
-  //     let userAddress = await openMetamask();
-  //     fromAddress = userAddress;
-  //     console.log("userAddress got from openMetamask: ", userAddress);
-  //   }
-  //   else {
-  //     console.log("Using input address");
-  //     fromAddress = inputAddress;
-  //   }
-  //   return fromAddress
-  // }
+  
 
   const uploadData = async (data_hash: String, data_name: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -126,6 +107,7 @@ export default function Upload() {
   const [dataHash, setDataHash] = useState('');
   const [dataName, setDataName] = useState('');
   const [dataPrice, setPrice] = useState(0);
+  const [dataCategory, setCategory] = useState("Others")
   const [dataPurchaseMl, setPurchaseMl] = useState(false);
   const [dataDesc, setDataDesc] = useState('');
 
@@ -137,6 +119,9 @@ export default function Upload() {
   };
   const DataPriceInput = async (event) => {
     setPrice(event.target.value);
+  }
+  const DataCategoryInput = async (event) => {
+    setCategory(event.target.value);
   }
   const DataPurchaseMlInput = async (event) => {
     setPurchaseMl(event.target.value);
@@ -192,11 +177,13 @@ export default function Upload() {
           />
         </FormControl>
 
-        {/* <TextField
+        <TextField
           id="categoryInput"
           select
           label="Select"
-          defaultValue="EUR"
+          value={dataCategory}
+          onChange={DataCategoryInput}
+          defaultValue="Others"
           helperText="Please select the data category"
           fullWidth
         >
@@ -205,11 +192,7 @@ export default function Upload() {
               {option.label}
             </MenuItem>
           ))}
-          </TextField> */}
-
-        <FormControl>
-          <FormControlLabel control={<Checkbox />} label="Purchase ML Service" value={dataPurchaseMl} onChange={DataPurchaseMlInput} />
-        </FormControl>
+          </TextField>
 
         <FormControl fullWidth sx={{ m: 1 }}>
           <InputLabel htmlFor="outlined-adornment-amount">Data Description</InputLabel>
@@ -222,6 +205,10 @@ export default function Upload() {
             multiline
             rows={4}
           />
+
+        <FormControl>
+          <FormControlLabel control={<Checkbox />} label="Purchase ML Service" value={dataPurchaseMl} onChange={DataPurchaseMlInput} />
+        </FormControl>
 
           <Button type="submit">Upload Data</Button>
         </FormControl>
