@@ -44,46 +44,46 @@ export default function Upload() {
     },
   ];*/
 
-  const isAddressBlank = (address?: String): boolean => {
-    return (address == null || address === "");
-  }
+  // const isAddressBlank = (address?: String): boolean => {
+  //   return (address == null || address === "");
+  // }
 
-  const getAccounts = async () => {
-    try {
-      return await window.ethereum.request({ method: 'eth_accounts' });
-    } catch (e) {
-      return [];
-    }
-  }
+  // const getAccounts = async () => {
+  //   try {
+  //     return await window.ethereum.request({ method: 'eth_accounts' });
+  //   } catch (e) {
+  //     return [];
+  //   }
+  // }
 
-  const openMetamask = async () => {
-    window.web3 = new Web3(window.ethereum);
-    let userAddresses = await getAccounts();
-    console.log("userAddress:", userAddresses)
-    if (!userAddresses.length) {
-      try {
-        userAddresses = await window.ethereum.enable();
-      } catch (e) {
-        return false;
-      }
-    }
-    return userAddresses.length ? userAddresses[0] : null;
-  };
+  // const openMetamask = async () => {
+  //   window.web3 = new Web3(window.ethereum);
+  //   let userAddresses = await getAccounts();
+  //   console.log("userAddress:", userAddresses)
+  //   if (!userAddresses.length) {
+  //     try {
+  //       userAddresses = await window.ethereum.enable();
+  //     } catch (e) {
+  //       return false;
+  //     }
+  //   }
+  //   return userAddresses.length ? userAddresses[0] : null;
+  // };
 
-  const validateInputAddress = async (inputAddress?: String) => {
-    let fromAddress;
-    if (isAddressBlank(inputAddress)) {
-      console.log("Calling openmMetamask to get user address");
-      let userAddress = await openMetamask();
-      fromAddress = userAddress;
-      console.log("userAddress got from openMetamask: ", userAddress);
-    }
-    else {
-      console.log("Using input address");
-      fromAddress = inputAddress;
-    }
-    return fromAddress
-  }
+  // const validateInputAddress = async (inputAddress?: String) => {
+  //   let fromAddress;
+  //   if (isAddressBlank(inputAddress)) {
+  //     console.log("Calling openmMetamask to get user address");
+  //     let userAddress = await openMetamask();
+  //     fromAddress = userAddress;
+  //     console.log("userAddress got from openMetamask: ", userAddress);
+  //   }
+  //   else {
+  //     console.log("Using input address");
+  //     fromAddress = inputAddress;
+  //   }
+  //   return fromAddress
+  // }
 
   const uploadData = async (data_hash: String, data_name: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
