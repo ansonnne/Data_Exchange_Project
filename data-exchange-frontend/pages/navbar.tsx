@@ -58,21 +58,6 @@ export default function NavBar() {
     setAddress("");
   };
 
-  const StyledAvatar = styled(Avatar)({
-    width: 32,
-    height: 32,
-    fontSize: '1.25rem',
-    lineHeight: 1,
-    borderRadius: '50%',
-    overflow: 'hidden',
-    backgroundColor: '#fff',
-  });
-  
-  const AvatarButton = styled(IconButton)({
-    position: 'absolute',
-    right: 20,
-  });
-
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', borderBottom:1,borderColor:'grey.500'}}>
@@ -98,8 +83,8 @@ export default function NavBar() {
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
+            sx={{ ml: 2, position: 'fixed' }}
+            aria-controls="account-menu"
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             id="avatar-button"
