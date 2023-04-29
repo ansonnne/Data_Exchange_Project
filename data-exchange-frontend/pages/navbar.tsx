@@ -1,15 +1,15 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import { styled } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from '@mui/material';
-import { NextResponse, NextRequest } from 'next/server';
 import Link from 'next/link';
-//import cookie from "js-cookie";
+
 
 export default function NavBar() {
   const [address, setAddress] = useState<string>();
@@ -58,6 +58,21 @@ export default function NavBar() {
     setAddress("");
   };
 
+  const StyledAvatar = styled(Avatar)({
+    width: 32,
+    height: 32,
+    fontSize: '1.25rem',
+    lineHeight: 1,
+    borderRadius: '50%',
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+  });
+  
+  const AvatarButton = styled(IconButton)({
+    position: 'absolute',
+    right: 20,
+  });
+
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', borderBottom:1,borderColor:'grey.500'}}>
@@ -87,7 +102,7 @@ export default function NavBar() {
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-            className="avatar"
+            id="avatar-button"
           >
             <Avatar sx={{ width: 32, height: 32 }}>A</Avatar>
           </IconButton>
