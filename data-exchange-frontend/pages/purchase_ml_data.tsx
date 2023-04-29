@@ -13,7 +13,7 @@ export default function Purchase_ML_Data() {
   const [resultTitle, setResultTitle] = useState("");
   const [resultContent, setResultContent] = useState("");
   
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     setshowingResult(true)
     setResultTitle("Purchase Successfully")

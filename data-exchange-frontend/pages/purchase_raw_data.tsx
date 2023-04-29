@@ -102,7 +102,7 @@ export default function Purchase_Raw_Data() {
         }, []);
 
         //fit the b_list array to dataList (data[])
-        const c_list: data[] = b_list[0].map((_, i: number) => ({
+        const c_list: data[] = b_list[0].map((_:any, i: number) => ({
           name: b_list[0][i].toString(),
           price: b_list[1][i].toString(),
           category: b_list[2][i].toString(),

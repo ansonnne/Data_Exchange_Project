@@ -8,9 +8,10 @@ import Tooltip from '@mui/material/Tooltip';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from '@mui/material';
 import { NextResponse, NextRequest } from 'next/server';
+import Link from 'next/link';
 //import cookie from "js-cookie";
 
-export default function NavBar(req: NextRequest, res: NextResponse) {
+export default function NavBar() {
   const [address, setAddress] = useState<string>();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -60,12 +61,24 @@ export default function NavBar(req: NextRequest, res: NextResponse) {
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', borderBottom:1,borderColor:'grey.500'}}>
-        <a href="/"><MenuItem sx={{ borderRadius: 2 }}>Home</MenuItem></a>
-        <a href="dashboard"><MenuItem sx={{ borderRadius: 2 }}>Dashboard</MenuItem></a>
-        <a href="upload"><MenuItem sx={{ borderRadius: 2 }}>Upload</MenuItem></a>
-        <a href="activate"><MenuItem sx={{ borderRadius: 2 }}>Activate</MenuItem></a>
-        <a href="purchase_raw_data"><MenuItem sx={{ borderRadius: 2 }}>Purchase Data</MenuItem></a>
-        <a href="purchase_ml_data"><MenuItem sx={{ borderRadius: 2 }}>Purchase ML Data</MenuItem></a>
+      <Link href="/">
+          <MenuItem sx={{ borderRadius: 2 }}>Home</MenuItem>
+        </Link>
+        <Link href="/dashboard">
+          <MenuItem sx={{ borderRadius: 2 }}>Dashboard</MenuItem>
+        </Link>
+        <Link href="/upload">
+          <MenuItem sx={{ borderRadius: 2 }}>Upload</MenuItem>
+        </Link>
+        <Link href="/activate">
+          <MenuItem sx={{ borderRadius: 2 }}>Activate</MenuItem>
+        </Link>
+        <Link href="/purchase_raw_data">
+          <MenuItem sx={{ borderRadius: 2 }}>Purchase Data</MenuItem>
+        </Link>
+        <Link href="/purchase_ml_data">
+          <MenuItem sx={{ borderRadius: 2 }}>Purchase ML Data</MenuItem>
+        </Link>
         <Tooltip title="Account" className="Avatar">
           <IconButton
             onClick={handleClick}

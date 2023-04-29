@@ -8,7 +8,7 @@ import abi from "../src/data_transaction.json";
 import { contractAddress } from "../src/address";
 import { ethers } from "ethers";
 import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, TextField } from '@mui/material';
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useCallback, useEffect, useState } from 'react';
 import { Constants } from "../Constants";
 import Popup from "./popup";
 import Popup_Result from './popup_result';
@@ -20,6 +20,7 @@ export default function Upload() {
   const [message, setMessage] = useState('');
   const [address, setAddress] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
+  //const [serviceFee, setServiceFee] = useState<number>();
   const [popTitle, setPopTitle] = useState('');
   const [popContent, setPopContent] = useState('');
 
@@ -74,9 +75,15 @@ export default function Upload() {
     }
   ];
 
-  
+  const [dataHash, setDataHash] = useState('');
+  const [dataName, setDataName] = useState('');
+  const [dataPrice, setPrice] = useState(0);
+  const [dataCategory, setCategory] = useState("Others")
+  const [dataPurchaseMl, setPurchaseMl] = useState(false);
+  const [dataDesc, setDataDesc] = useState('');
 
-  const uploadData = async (data_hash: String, data_name: String, data_category: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
+
+  const uploadData = useCallback(async (data_hash: String, data_name: String, data_category: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = await provider.getSigner();
@@ -96,7 +103,18 @@ export default function Upload() {
       //let fromAddress = await validateInputAddress(inputAddress);
       console.log("data_hash, dataName,price, purchaseMl,dataDesc,", data_hash, data_name, data_category,price, purchase_Ml, data_desc);
 
-      const transaction = await dataExchange.uploadData(data_hash, data_name, data_category, price, purchase_Ml, data_desc)
+      //charge 1 wei if user purchase ML fee
+      let serviceFee = 0;
+
+      if (dataPurchaseMl === true) {
+        serviceFee = 1;
+      }
+
+      console.log("service fee",serviceFee)
+
+      const transaction = await dataExchange.uploadData(data_hash, data_name, data_category, price, purchase_Ml, data_desc, {
+        value: serviceFee
+      })
       console.log(transaction)
       setIsProcessing(true);
       setPopTitle("Transaction Loading");
@@ -119,34 +137,29 @@ export default function Upload() {
       console.log(error)
       return Constants.MESSAGE_TRASACTION_GENERAL_ERROR
     }
-  }
+  },[dataPurchaseMl])
 
-  const [dataHash, setDataHash] = useState('');
-  const [dataName, setDataName] = useState('');
-  const [dataPrice, setPrice] = useState(0);
-  const [dataCategory, setCategory] = useState("Others")
-  const [dataPurchaseMl, setPurchaseMl] = useState(false);
-  const [dataDesc, setDataDesc] = useState('');
 
-  const DataNameInput = async (event) => {
+
+  const DataNameInput = async (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setDataName(event.target.value);
   };
-  const DataHashInput = async (event) => {
+  const DataHashInput = async (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setDataHash(event.target.value);
   };
-  const DataPriceInput = async (event) => {
-    setPrice(event.target.value);
+  const DataPriceInput = async (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setPrice(Number(event.target.value));
   }
-  const DataCategoryInput = async (event) => {
+  const DataCategoryInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setCategory(event.target.value);
   }
-  const DataPurchaseMlInput = async (event) => {
-    setPurchaseMl(event.target.value);
+  const DataPurchaseMlInput = async (event: React.SyntheticEvent, checked: boolean) => {
+    setPurchaseMl(checked);
   }
-  const DataDescInput = async (event) => {
+  const DataDescInput = async (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setDataDesc(event.target.value);
   }
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     if (dataHash.length == 0 || dataName.length == 0|| dataDesc.length ==0){
       setshowingResult(true);
@@ -230,7 +243,11 @@ export default function Upload() {
           />
 
         <FormControl>
-          <FormControlLabel control={<Checkbox />} label="Purchase ML Service" value={dataPurchaseMl} onChange={DataPurchaseMlInput} />
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Purchase ML Service"
+            checked={dataPurchaseMl}
+            onChange={DataPurchaseMlInput} />
         </FormControl>
 
           <Button type="submit">Upload Data</Button>
@@ -248,7 +265,7 @@ export default function Upload() {
 
     <div>
       {showingResult && (
-        <Popup_Result title={resultTitle} openPopup={true} setOpenPopup={setshowingResult}>
+        <Popup_Result title={resultTitle} openPopup={true} setOpenPopup={setshowingResult} status={resultStatus}>
           {resultContent}
         </Popup_Result>
       )}

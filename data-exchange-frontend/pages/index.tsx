@@ -4,6 +4,7 @@ import { contractAddress } from "../src/address"
 import { ethers } from "ethers";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {createTheme, ThemeProvider,Typography,} from "@mui/material";
+import Image from 'next/image';
 import { Box, Stack } from "@mui/system";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -138,7 +139,7 @@ export default function Index() {
       <NavBar />
 
       <Box sx={{width: '100%', boxshadow: 2}}>
-        <img src="Purple_4.png" alt="Image Not Found" width="100%"/>
+        <Image src="/Purple_4.png" alt="Image Not Found" layout="responsive" width={500} height={500} />
       </Box>
       <Box sx={{boxshadow: 2, display: 'block', p: 1, m: 5}}>
         <ThemeProvider theme={theme}>

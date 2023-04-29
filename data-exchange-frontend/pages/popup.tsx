@@ -11,7 +11,7 @@ type PopupProps = {
 export default function Popup(props: PopupProps) {
   const { title, children, openPopup, setOpenPopup } = props;
 
-  const handleClose = (event, reason) => {
+  const handleClose = (event: any, reason: string) => {
     if ((reason && reason == "backdropClick") || (reason && reason == "escapeKeyDown")) 
         return;
     setOpenPopup(false);
