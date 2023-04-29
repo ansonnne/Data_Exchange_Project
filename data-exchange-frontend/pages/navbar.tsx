@@ -87,9 +87,9 @@ export default function NavBar() {
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-            className="Avatar"
+            className="avatar"
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}>A</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
