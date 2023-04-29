@@ -5,16 +5,10 @@ import { ethers } from 'ethers';
 import { contractAddress } from '@/src/address';
 import abi from "../src/data_transaction.json";
 import { Constants } from "../Constants";
-import Web3 from 'web3';
-declare const window: any;
+import Popup from "./popup";
+import Popup_Result from './popup_result';
 
-// const data = [
-//   { name: 'Data 1', price: 10, category: 'A', description: 'abc' },
-//   { name: 'Data 2', price: 20, category: 'B', description: 'def' },
-//   { name: 'Data 3', price: 30, category: 'C', description: 'ddfds' },
-//   { name: 'Data 4', price: 40, category: 'D', description: '1dsd' },
-//   { name: 'Data 5', price: 80, category: 'C', description: 'Pokemon testing' },
-// ];
+declare const window: any;
 
 interface data {
   name: string;
@@ -24,13 +18,18 @@ interface data {
 }
 
 export default function Purchase_Raw_Data() {
-  const Web3 = require("web3")
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All categories');
   const [priceFilter, setPriceFilter] = useState('All prices');
   const [isProcessing, setIsProcessing] = useState(false);
   const [dataList, setData] = useState<data[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [popTitle, setPopTitle] = useState('');
+  const [popContent, setPopContent] = useState('');
+
+  const [showingResult, setshowingResult] = useState(false);
+  const [resultTitle, setResultTitle] = useState("");
+  const [resultContent, setResultContent] = useState("");
 
   //loading when webpage is loaded for first 5 seconds
   useEffect(() => {
@@ -41,7 +40,7 @@ export default function Purchase_Raw_Data() {
     return () => {
       clearTimeout(timeout); // clear the timeout on unmount
     };
-  }, []); // run the effect only once on mount
+  }, []);
 
   // Filter table data based on search query, category filter, and price filter
   const filteredData = dataList.filter((row) => {
@@ -57,13 +56,6 @@ export default function Purchase_Raw_Data() {
       (priceFilter === 'Between $50 and $100' && row.price >= 50 && row.price <= 100) || 
       (priceFilter === 'Over $100' && row.price > 100))
     );
-    // return (
-    //   (name.includes(query)) &&
-    //   (categoryFilter === 'All categories') &&
-    //   (priceFilter === 'All prices' || (priceFilter === 'Under $50' && row.price < 50) || 
-    //   (priceFilter === 'Between $50 and $100' && row.price >= 50 && row.price <= 100) || 
-    //   (priceFilter === 'Over $100' && row.price > 100))
-    // );
   });
 
 
@@ -81,6 +73,8 @@ export default function Purchase_Raw_Data() {
         );
         console.log(dataExchange)
         setIsProcessing(true);
+        setPopTitle("Loading Data")
+        setPopContent("Initializing data...")
 
         const transaction = await dataExchange.view_raw_data_id_list()
         console.log("Transaction length",transaction.length)
@@ -136,7 +130,7 @@ export default function Purchase_Raw_Data() {
       signer
       );
       console.log(dataExchange)
-      setIsProcessing(true);
+      
       try {
         const price = filteredData[index]?.price
         console.log("price is ", price)
@@ -144,13 +138,22 @@ export default function Purchase_Raw_Data() {
           value: price,
         })
         console.log(tx)
-        alert("Please wait until a pop up dialog indicate purchase is successful.")
+        //trigger pop up dialog box
+        setIsProcessing(true);
+        setPopTitle("Transaction Loading");
+        setPopContent("Please wait for a few seconds...");
 
         const result = await tx.wait()
         console.log(result)
 
+        setIsProcessing(false);
         const dataTx = await dataExchange.view_purchased_raw_data(index)
-        alert("You have successfully purchase the data. The data hash is\n"+ dataTx)
+
+        setshowingResult(true);
+        setResultTitle("Purchase Successfully")
+        setResultContent("The data hash is :<br>" + dataTx)
+        //alert("You have successfully purchase the data. The data hash is\n"+ dataTx)
+
       } 
       catch(e) {
         console.error(e,index)
@@ -244,22 +247,31 @@ export default function Purchase_Raw_Data() {
               </TableRow>
             ))
           ) : (
-                isProcessing === true || isLoading === true ? (
-                  <TableRow>
+                <TableRow>
                   <TableCell colSpan={3} align="center">
-                    Loading Data...
+                    No data found
                   </TableCell>
                 </TableRow>
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={3} align="center">
-                      No data found
-                    </TableCell>
-                  </TableRow>
-                )
           )}
         </TableBody>
       </Table>
+      
+      <div>
+      {isProcessing && (
+        <Popup title={popTitle} openPopup={true} setOpenPopup={setIsProcessing}>
+          <div>{popContent}</div>
+        </Popup>
+      )}
+    </div>
+
+    <div>
+      {showingResult && (
+        <Popup_Result title={resultTitle} openPopup={true} setOpenPopup={setshowingResult} status={true}>
+          {resultContent}
+        </Popup_Result>
+      )}
+    </div>
+
     </>
   );
 }

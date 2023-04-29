@@ -10,6 +10,8 @@ import { ethers } from "ethers";
 import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, TextField } from '@mui/material';
 import { SetStateAction, useEffect, useState } from 'react';
 import { Constants } from "../Constants";
+import Popup from "./popup";
+import Popup_Result from './popup_result';
 declare const window: any;
 
 export default function Upload() {
@@ -17,6 +19,14 @@ export default function Upload() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState('');
   const [address, setAddress] = useState<string>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [popTitle, setPopTitle] = useState('');
+  const [popContent, setPopContent] = useState('');
+
+  const [showingResult, setshowingResult] = useState(false);
+  const [resultTitle, setResultTitle] = useState("");
+  const [resultContent, setResultContent] = useState("");
+  const [resultStatus, setResultStatus] = useState(true);
 
   useEffect(() => {
     const address = sessionStorage.getItem("wallet");
@@ -79,7 +89,7 @@ export default function Upload() {
 
     console.log(dataExchange)
 
-    setIsProcessing(true);
+ 
     //event.preventDefault();
 
     try {
@@ -88,11 +98,18 @@ export default function Upload() {
 
       const transaction = await dataExchange.uploadData(data_hash, data_name, data_category, price, purchase_Ml, data_desc)
       console.log(transaction)
-      alert("Please wait until a pop up dialog indicate data is uploaded")
+      setIsProcessing(true);
+      setPopTitle("Transaction Loading");
+      setPopContent("Please wait for a few seconds...");
+      //alert("Please wait until a pop up dialog indicate data is uploaded")
 
       const result = await transaction.wait()
       console.log(result)
-      alert("Data uploaded sucessfully")
+      setshowingResult(true);
+      setResultTitle("Upload Successfully")
+      setResultContent("Data is uploaded successfully")
+      setResultStatus(true)
+      //alert("Data uploaded sucessfully")
 
       setIsProcessing(false);
       return Constants.MESSAGE_TRASACTION_UPLOAD_SUCCESSFULLY
@@ -131,8 +148,14 @@ export default function Upload() {
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsProcessing(true);
-    uploadData(dataHash, dataName, dataCategory, dataPrice, dataPurchaseMl, dataDesc);
+    if (dataHash.length == 0 || dataName.length == 0|| dataDesc.length ==0){
+      setshowingResult(true);
+      setResultTitle("Error")
+      setResultContent("Please fill in all the information before uploading the data")
+      setResultStatus(false)
+    } else{
+      uploadData(dataHash, dataName, dataCategory, dataPrice, dataPurchaseMl, dataDesc);
+    }
     //setDataHash('');
   };
   return (
@@ -214,6 +237,22 @@ export default function Upload() {
         </FormControl>
 
       </Box>
+
+      <div>
+      {isProcessing && (
+        <Popup title={popTitle} openPopup={true} setOpenPopup={setIsProcessing}>
+          <div>{popContent}</div>
+        </Popup>
+      )}
+    </div>
+
+    <div>
+      {showingResult && (
+        <Popup_Result title={resultTitle} openPopup={true} setOpenPopup={setshowingResult}>
+          {resultContent}
+        </Popup_Result>
+      )}
+    </div>
 
     </>
   )
