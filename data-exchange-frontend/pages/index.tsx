@@ -9,6 +9,7 @@ import { Box, Stack } from "@mui/system";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import * as React from 'react';
+import Popup_Result from './popup_result';
 
 //Central styling session
 const theme = createTheme({
@@ -44,6 +45,11 @@ interface TabPanelProps {
   value: number;
 }
 
+//check user has MetaMasked installed
+interface CustomWindow extends Window {
+  ethereum?: any;
+}
+
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -74,13 +80,31 @@ function a11yProps(index: number) {
 export default function Index() {
   const [address, setAddress] = useState<string>();
   const [id_list, setID] = useState();
+  const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState<boolean>(true);
+  const [showingResult, setshowingResult] = useState(false);
+
+
+  //warning message if user's browser has no MetaMask installed
+  useEffect(() => {
+      const windowWithEthereum = window as CustomWindow;
+      if (typeof windowWithEthereum.ethereum !== 'undefined') {
+        setIsMetaMaskInstalled(true);
+      } else {
+        setIsMetaMaskInstalled(false);
+      }
+
+    if (isMetaMaskInstalled === false) {
+      setshowingResult(true)
+    }
+    console.log("installed",isMetaMaskInstalled)
+  }, []);
 
   useEffect(() => {
     const address = sessionStorage.getItem("wallet");
     if (address) {
       setAddress(address);
     }
-  }, []);
+  }, [isMetaMaskInstalled]);
 
   const getBalance = async () => {
     if (provider === null) return;
@@ -234,6 +258,14 @@ export default function Index() {
         </Stack>
       </ThemeProvider>
     </Box>
+
+    <div>
+      {showingResult && (
+        <Popup_Result title={"Error Occurs"} openPopup={true} setOpenPopup={setshowingResult} status={false}>
+          Please install MetaMask before loading this page
+        </Popup_Result>
+      )}
+    </div>
 
     </>
   );
