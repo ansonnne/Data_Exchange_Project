@@ -185,8 +185,8 @@ export default function Index() {
                 This is a decentralized data transaction platform providing medium for the exchange of two types of products, raw data and API key for machine learning model. 
                 Dataset sellers can upload their data stored in IPFS to our platform and claim the selling price through our smart contract. There is an option for them to purchase machine learning service provided by our team. 
                 
-                We hope to leverage our expertise to generate valuable insights based on sellers’ data. The machine learning models that we create will co-exist with the raw data provided by data sellers. 
-                It depends on buyers’ needs to choose either product that suits them more while sellers can also benefit from multiple product lines to generate increased sales amount. 
+                We hope to leverage our expertise to generate valuable insights based on sellers&apos; data. The machine learning models that we create will co-exist with the raw data provided by data sellers. 
+                It depends on buyers&apos; needs to choose either product that suits them more while sellers can also benefit from multiple product lines to generate increased sales amount. 
 
                 Our platform is powered by the usage of IPFS and smart contract which speeds up the transaction process and eliminates the need for us to maintain database. 
                 To promote the best data transaction environment, we will dedicate our efforts towards regulation. 
@@ -231,15 +231,15 @@ export default function Index() {
           </Box>
           <TabPanel value={value1} index={0}>
             <Typography variant='subtitle1'  color="#251654">
-              Our Data Exchange Platform offers selling and purchasing of raw datasets. If you wish sell your valuable dataset, please go to the data uploading page by clicking the 'Upload' button to sell your data.
-              If you wish to purchase raw datasets from our platform, please go to the 'Purchase Data' page through the navigation portal on the top. You would be required to fill in your Metamask wallet address for both purchasing and uploading data. 
+              Our Data Exchange Platform offers selling and purchasing of raw datasets. If you wish sell your valuable dataset, please go to the data uploading page by clicking the &apos;Upload&apos; button to sell your data.
+              If you wish to purchase raw datasets from our platform, please go to the &apos;Purchase Data&apos; page through the navigation portal on the top. You would be required to fill in your Metamask wallet address for both purchasing and uploading data. 
               Transaction will be done after validating your wallet address.
             </Typography>
           </TabPanel>
           <TabPanel value={value1} index={1}>
             <Typography variant='subtitle1'  color="#251654">
-              We also provide customized ML model building and training process for your dataset. If you wish to purchase our ML service, you may either click the 'Purchase ML service' button when uploading your dataset, or you could go to 
-              the 'Activate' webpage to activate your ML service with the data hash of the dataset you would like to trained with ML model upon.
+              We also provide customized ML model building and training process for your dataset. If you wish to purchase our ML service, you may either click the &apos;Purchase ML service&apos; button when uploading your dataset, or you could go to 
+              the &apos;Activate&apos; webpage to activate your ML service with the data hash of the dataset you would like to trained with ML model upon.
             </Typography>
           </TabPanel>
           <TabPanel value={value1} index={2}>
