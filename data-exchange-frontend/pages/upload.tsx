@@ -9,7 +9,6 @@ import { contractAddress } from "../src/address";
 import { ethers } from "ethers";
 import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, TextField } from '@mui/material';
 import { SetStateAction, useCallback, useEffect, useState } from 'react';
-import { Constants } from "../Constants";
 import Popup from "./popup";
 import Popup_Result from './popup_result';
 declare const window: any;
@@ -79,11 +78,10 @@ export default function Upload() {
   const [dataName, setDataName] = useState('');
   const [dataPrice, setPrice] = useState(0);
   const [dataCategory, setCategory] = useState("Others")
-  const [dataPurchaseMl, setPurchaseMl] = useState(false);
   const [dataDesc, setDataDesc] = useState('');
 
 
-  const uploadData = useCallback(async (data_hash: String, data_name: String, data_category: String, price: Number, purchase_Ml: boolean, data_desc: String) => {
+  const uploadData = useCallback(async (data_hash: String, data_name: String, data_category: String, price: Number, data_desc: String) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = await provider.getSigner();
@@ -101,20 +99,9 @@ export default function Upload() {
 
     try {
       //let fromAddress = await validateInputAddress(inputAddress);
-      console.log("data_hash, dataName,price, purchaseMl,dataDesc,", data_hash, data_name, data_category,price, purchase_Ml, data_desc);
+      console.log("data_hash, dataName,price,dataDesc,", data_hash, data_name, data_category,price, data_desc);
 
-      //charge 1 wei if user purchase ML fee
-      let serviceFee = 0;
-
-      if (dataPurchaseMl === true) {
-        serviceFee = 1;
-      }
-
-      console.log("service fee",serviceFee)
-
-      const transaction = await dataExchange.uploadData(data_hash, data_name, data_category, price, purchase_Ml, data_desc, {
-        value: serviceFee
-      })
+      const transaction = await dataExchange.uploadData(data_hash, data_name, data_category, price, data_desc)
       console.log(transaction)
       setIsProcessing(true);
       setPopTitle("Transaction Loading");
@@ -130,14 +117,12 @@ export default function Upload() {
       //alert("Data uploaded sucessfully")
 
       setIsProcessing(false);
-      return Constants.MESSAGE_TRASACTION_UPLOAD_SUCCESSFULLY
     }
     catch (error) {
       setIsProcessing(false);
       console.log(error)
-      return Constants.MESSAGE_TRASACTION_GENERAL_ERROR
     }
-  },[dataPurchaseMl])
+  },[])
 
 
 
@@ -153,9 +138,6 @@ export default function Upload() {
   const DataCategoryInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setCategory(event.target.value);
   }
-  const DataPurchaseMlInput = async (event: React.SyntheticEvent, checked: boolean) => {
-    setPurchaseMl(checked);
-  }
   const DataDescInput = async (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setDataDesc(event.target.value);
   }
@@ -167,7 +149,7 @@ export default function Upload() {
       setResultContent("Please fill in all the information before uploading the data")
       setResultStatus(false)
     } else{
-      uploadData(dataHash, dataName, dataCategory, dataPrice, dataPurchaseMl, dataDesc);
+      uploadData(dataHash, dataName, dataCategory, dataPrice, dataDesc);
     }
     //setDataHash('');
   };
@@ -216,7 +198,7 @@ export default function Upload() {
         <TextField
           id="categoryInput"
           select
-          label="Select"
+          label="Data Category"
           value={dataCategory}
           onChange={DataCategoryInput}
           defaultValue="Others"
@@ -242,13 +224,13 @@ export default function Upload() {
             rows={4}
           />
 
-        <FormControl>
+        {/* <FormControl>
           <FormControlLabel
             control={<Checkbox />}
             label="Purchase ML Service"
             checked={dataPurchaseMl}
             onChange={DataPurchaseMlInput} />
-        </FormControl>
+        </FormControl> */}
 
           <Button type="submit">Upload Data</Button>
         </FormControl>

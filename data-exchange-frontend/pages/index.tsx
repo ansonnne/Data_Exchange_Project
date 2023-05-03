@@ -220,44 +220,37 @@ export default function Index() {
       <ThemeProvider theme={theme}>
         <Stack spacing={2}>
           <Typography variant="h4"   color="#251654">
-            Product Introduction
+            Product Introduction & Get Started!
           </Typography>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value1} onChange={handleChange1} aria-label="basic tabs example 1">
               <Tab label="Raw data" {...a11yProps(0)} />
               <Tab label="Machine learning package" {...a11yProps(1)} />
+              <Tab label="Get Started!" {...a11yProps(2)} />
             </Tabs>
           </Box>
           <TabPanel value={value1} index={0}>
             <Typography variant='subtitle1'  color="#251654">
-              Raw data Purchase guide
+              Our Data Exchange Platform offers selling and purchasing of raw datasets. If you wish sell your valuable dataset, please go to the data uploading page by clicking the 'Upload' button to sell your data.
+              If you wish to purchase raw datasets from our platform, please go to the 'Purchase Data' page through the navigation portal on the top. You would be required to fill in your Metamask wallet address for both purchasing and uploading data. 
+              Transaction will be done after validating your wallet address.
             </Typography>
           </TabPanel>
           <TabPanel value={value1} index={1}>
             <Typography variant='subtitle1'  color="#251654">
-              ML package purchase guide
+              We also provide customized ML model building and training process for your dataset. If you wish to purchase our ML service, you may either click the 'Purchase ML service' button when uploading your dataset, or you could go to 
+              the 'Activate' webpage to activate your ML service with the data hash of the dataset you would like to trained with ML model upon.
+            </Typography>
+          </TabPanel>
+          <TabPanel value={value1} index={2}>
+            <Typography variant='subtitle1'  color="#251654">
+              Please click the A (Account) button on the top right corner of the webpage to login with your wallet address!
             </Typography>
           </TabPanel>
         </Stack>
       </ThemeProvider>
     </Box>
 
-    <Box sx={{boxshadow: 2, display: 'block', p: 1, m: 5}}>
-      <ThemeProvider theme={theme}>
-        <Stack spacing={2}>
-          <Box>
-            <Typography variant="h4" color="#251654">
-                User Guide
-            </Typography>
-          </Box>
-          <Box sx={{boxshadow: 2, display: 'block', p: 1, m: 5}}>
-            <Typography variant="subtitle1" color="#251654">
-                Please click the M button on top of the webpage to login with your wallet address!
-            </Typography>
-          </Box>
-        </Stack>
-      </ThemeProvider>
-    </Box>
 
     <div>
       {showingResult && (

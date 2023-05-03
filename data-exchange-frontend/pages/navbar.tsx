@@ -70,14 +70,8 @@ export default function NavBar() {
         <Link href="/upload">
           <MenuItem sx={{ borderRadius: 2 }}>Upload</MenuItem>
         </Link>
-        <Link href="/activate">
-          <MenuItem sx={{ borderRadius: 2 }}>Activate</MenuItem>
-        </Link>
         <Link href="/purchase_raw_data">
           <MenuItem sx={{ borderRadius: 2 }}>Purchase Data</MenuItem>
-        </Link>
-        <Link href="/purchase_ml_data">
-          <MenuItem sx={{ borderRadius: 2 }}>Purchase ML Data</MenuItem>
         </Link>
         <Tooltip title="Account" className="Avatar">
           <IconButton

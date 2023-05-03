@@ -4,7 +4,6 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, Table, TableBod
 import { ethers } from 'ethers';
 import { contractAddress } from '@/src/address';
 import abi from "../src/data_transaction.json";
-import { Constants } from "../Constants";
 import Popup from "./popup";
 import Popup_Result from './popup_result';
 
@@ -113,7 +112,6 @@ export default function Purchase_Raw_Data() {
         console.log("DataList", dataList)
 
         setIsProcessing(false);
-        return Constants.MESSAGE_TRASACTION_UPLOAD_SUCCESSFULLY
       })();
   },[]);
 
@@ -168,7 +166,7 @@ export default function Purchase_Raw_Data() {
   return (
     <>
       <NavBar />
-      <h1>Purchase ML Data</h1>
+      <h1>Purchase Data</h1>
 
       <Box
         m={1}
