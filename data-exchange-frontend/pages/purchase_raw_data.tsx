@@ -227,7 +227,7 @@ export default function Purchase_Raw_Data() {
         <TableHead>
           <TableRow>
             <TableCell>Data Name</TableCell>
-            <TableCell>Price</TableCell>
+            <TableCell>Price (in wei)</TableCell>
             <TableCell>Category</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Action</TableCell>
