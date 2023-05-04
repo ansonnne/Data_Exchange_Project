@@ -33,7 +33,7 @@ export default function Purchase_Raw_Data() {
   //loading when webpage is loaded for first 5 seconds
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setIsLoading(false);
+      setIsLoading(false); //when data is finish loading, remove dialog box
     }, 5000); // 5000 = 5 seconds
 
     return () => {
@@ -150,8 +150,6 @@ export default function Purchase_Raw_Data() {
         setshowingResult(true);
         setResultTitle("Purchase Successfully")
         setResultContent("The data hash is :<br>" + dataTx)
-        //alert("You have successfully purchase the data. The data hash is\n"+ dataTx)
-
       } 
       catch(e) {
         console.error(e,index)
