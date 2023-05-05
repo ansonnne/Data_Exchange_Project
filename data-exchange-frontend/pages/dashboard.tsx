@@ -35,9 +35,9 @@ const Dashboard = () => {
   const rows = data.map((item, index) => (
     <TableRow key={index}>
       <TableCell align="center">{item.date}</TableCell>
+      <TableCell align="center">{item.name}</TableCell>
       <TableCell align="center">{item.price}</TableCell>
       <TableCell align="center">{item.category}</TableCell>
-      <TableCell align="center">{item.name}</TableCell>
     </TableRow>
   ));
 
@@ -101,9 +101,9 @@ const Dashboard = () => {
           <TableHead>
             <TableRow style={{ backgroundColor: '#ccc', color: '#333', fontWeight: 'bold', border: '1px solid #999' }}>
             <TableCell style={{ padding: '10px', textAlign: 'center' }}>Dataset</TableCell>
+            <TableCell style={{ padding: '10px', textAlign: 'center' }}>Name</TableCell>
               <TableCell style={{ padding: '10px', textAlign: 'center' }}>Price(In Wei)</TableCell>
               <TableCell style={{ padding: '10px', textAlign: 'center' }}>Categories</TableCell>
-              <TableCell style={{ padding: '10px', textAlign: 'center' }}>Name</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
