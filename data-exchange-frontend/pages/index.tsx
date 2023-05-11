@@ -182,11 +182,11 @@ export default function Index() {
             </Box>
             <TabPanel value={value} index={0}>
               <Typography variant='subtitle1' color="#251654">
-                This is a decentralized data transaction platform providing medium for the exchange of two types of products, raw data and API key for machine learning model. 
-                Dataset sellers can upload their data stored in IPFS to our platform and claim the selling price through our smart contract. There is an option for them to purchase machine learning service provided by our team. 
+                This is a decentralized data transaction platform providing medium for the exchange of valuabe raw datasets for our users to tap into the market value of their data. 
+                Dataset sellers can upload their data stored in IPFS to our platform and claim the selling price through our smart contract. 
                 
-                We hope to leverage our expertise to generate valuable insights based on sellers&apos; data. The machine learning models that we create will co-exist with the raw data provided by data sellers. 
-                It depends on buyers&apos; needs to choose either product that suits them more while sellers can also benefit from multiple product lines to generate increased sales amount. 
+                We hope to leverage our expertise to generate valuable insights based on sellers&apos; data. 
+                It depends on buyers&apos; needs to choose from different categories of datasets specialized for their businesses or personal use. 
 
                 Our platform is powered by the usage of IPFS and smart contract which speeds up the transaction process and eliminates the need for us to maintain database. 
                 To promote the best data transaction environment, we will dedicate our efforts towards regulation. 
@@ -195,7 +195,7 @@ export default function Index() {
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Typography variant='subtitle1'  color="#251654">
-                We have a two-stage development plan for the regulation, with due diligence validation in IPFS at first, followed by automatic data validation powered by in-house machine learning model. 
+                We have a two-stage development plan for the regulation, with due diligence validation in IPFS at first. 
                 The aim of our platform is to maximize the utilization of data across the globe which eventually facilitates the research and development process of new innovation. 
                 By resource reallocation, data sellers are able to generate revenue and data buyers are able to create innovation for the benefits of the society. 
               </Typography>
@@ -225,24 +225,16 @@ export default function Index() {
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value1} onChange={handleChange1} aria-label="basic tabs example 1">
               <Tab label="Raw data" {...a11yProps(0)} />
-              <Tab label="Machine learning package" {...a11yProps(1)} />
-              <Tab label="Get Started!" {...a11yProps(2)} />
+              <Tab label="Get Started!" {...a11yProps(1)} />
             </Tabs>
           </Box>
           <TabPanel value={value1} index={0}>
             <Typography variant='subtitle1'  color="#251654">
               Our Data Exchange Platform offers selling and purchasing of raw datasets. If you wish sell your valuable dataset, please go to the data uploading page by clicking the &apos;Upload&apos; button to sell your data.
-              If you wish to purchase raw datasets from our platform, please go to the &apos;Purchase Data&apos; page through the navigation portal on the top. You would be required to fill in your Metamask wallet address for both purchasing and uploading data. 
-              Transaction will be done after validating your wallet address.
+              If you wish to purchase raw datasets from our platform, please go to the &apos;Purchase Data&apos; page through the navigation portal on the top. You would be required to use Metamask for both purchasing and uploading data operation.
             </Typography>
           </TabPanel>
           <TabPanel value={value1} index={1}>
-            <Typography variant='subtitle1'  color="#251654">
-              We also provide customized ML model building and training process for your dataset. If you wish to purchase our ML service, you may either click the &apos;Purchase ML service&apos; button when uploading your dataset, or you could go to 
-              the &apos;Activate&apos; webpage to activate your ML service with the data hash of the dataset you would like to trained with ML model upon.
-            </Typography>
-          </TabPanel>
-          <TabPanel value={value1} index={2}>
             <Typography variant='subtitle1'  color="#251654">
               Please click the A (Account) button on the top right corner of the webpage to login with your wallet address!
             </Typography>
