@@ -224,7 +224,7 @@ export default function Index() {
           </Typography>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value1} onChange={handleChange1} aria-label="basic tabs example 1">
-              <Tab label="Raw data" {...a11yProps(0)} />
+              <Tab label="Introduction" {...a11yProps(0)} />
               <Tab label="Get Started!" {...a11yProps(1)} />
             </Tabs>
           </Box>
